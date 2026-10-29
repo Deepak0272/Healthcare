@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrative Portal – Health Tech</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-header">
+        <a class="brand-logo" href="dashboard.html">
+          <div class="logo-icon"><i class="bi bi-heart-pulse-fill"></i></div>
+          <span>Health<span class="highlight">Tech</span></span>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-heading">Main Navigation</li>
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="records.html" class="sidebar-link">
+            <i class="bi bi-folder2-open"></i>
+            <span>My Health Records</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="monitoring.html" class="sidebar-link">
+            <i class="bi bi-activity"></i>
+            <span>Health Monitoring</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="appointments.html" class="sidebar-link">
+            <i class="bi bi-calendar2-check"></i>
+            <span>Appointments</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="emergency.html" class="sidebar-link emergency-link">
+            <i class="bi bi-shield-fill-exclamation"></i>
+            <span>Emergency Contacts</span>
+          </a>
+        </li>
+
+        <li class="sidebar-heading mt-3">Administrative Controls</li>
+        <li class="sidebar-item" id="sidebar-admin-link">
+          <a href="admin.html" class="sidebar-link active text-warning">
+            <i class="bi bi-shield-lock-fill"></i>
+            <span>Admin Panel</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="bi bi-person-gear"></i>
+            <span>Profile Settings</span>
+          </a>
+        </li>
+        <li class="sidebar-item mt-2">
+          <a href="#" class="sidebar-link text-danger btn-logout-action">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" style="background: linear-gradient(135deg, #d97706, #b45309);">A</div>
+          <div class="user-meta">
+            <div class="name user-display-name">Administrator</div>
+            <div class="role-badge text-warning fw-bold">SYSTEM ADMIN</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="sidebar-toggle-btn" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+          </button>
+          <div>
+            <h5 class="mb-0 fw-bold text-dark">Administrative Health Console</h5>
+            <span class="small text-muted">Platform oversight, doctor registry, appointments, and role permissions</span>
+          </div>
+        </div>
+        <button class="btn btn-primary-ht" data-bs-toggle="modal" data-bs-target="#adminAddDoctorModal">
+          <i class="bi bi-person-plus me-1"></i>Add New Doctor
+        </button>
+      </header>
+
+      <div class="dashboard-body">
+        <!-- 5 Overview Stat Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6 col-lg">
+            <div class="stat-card">
+              <span class="stat-card-title">Total Patients</span>
+              <div class="stat-value text-primary mt-2" id="statTotalPatients">0</div>
+              <div class="small text-muted mt-1">Registered users</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg">
+            <div class="stat-card">
+              <span class="stat-card-title">Active Doctors</span>
+              <div class="stat-value text-success mt-2" id="statTotalDoctors">0</div>
+              <div class="small text-muted mt-1">Directory practitioners</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg">
+            <div class="stat-card">
+              <span class="stat-card-title">Appointments</span>
+              <div class="stat-value text-dark mt-2" id="statTotalAppointments">0</div>
+              <div class="small text-muted mt-1">Scheduled & past</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg">
+            <div class="stat-card">
+              <span class="stat-card-title">Health Records</span>
+              <div class="stat-value text-secondary mt-2" id="statTotalRecords">0</div>
+              <div class="small text-muted mt-1">Prescriptions & reports</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg">
+            <div class="stat-card">
+              <span class="stat-card-title">SOS Alerts</span>
+              <div class="stat-value text-danger mt-2" id="statTotalAlerts">0</div>
+              <div class="small text-muted mt-1">Emergency dispatches</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Tabs: Doctors, Appointments, Users -->
+        <div class="card card-ht p-4 mb-4">
+          <ul class="nav nav-pills mb-4" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active fw-bold" id="tab-doctors-btn" data-bs-toggle="pill" data-bs-target="#tab-doctors" type="button" role="tab">
+                <i class="bi bi-people me-1"></i>Doctor Directory Management
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link fw-bold" id="tab-appts-btn" data-bs-toggle="pill" data-bs-target="#tab-appts" type="button" role="tab">
+                <i class="bi bi-calendar2-week me-1"></i>Appointment Oversight
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link fw-bold" id="tab-users-btn" data-bs-toggle="pill" data-bs-target="#tab-users" type="button" role="tab">
+                <i class="bi bi-shield-lock me-1"></i>User Role Permissions
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content" id="adminTabsContent">
+            <!-- Doctor Directory Management Tab -->
+            <div class="tab-pane fade show active" id="tab-doctors" role="tabpanel">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold text-dark mb-0">Active Healthcare Specialists</h6>
+                <button class="btn btn-sm btn-outline-ht" data-bs-toggle="modal" data-bs-target="#adminAddDoctorModal">
+                  + Add Doctor Profile
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Doctor Name</th>
+                      <th>Specialization</th>
+                      <th>Department</th>
+                      <th>Consultation Fee</th>
+                      <th>Rating</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminDoctorsTableBody">
+                    <tr><td colspan="6" class="text-center py-4 text-muted">Loading doctors...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Appointment Oversight Tab -->
+            <div class="tab-pane fade" id="tab-appts" role="tabpanel">
+              <h6 class="fw-bold text-dark mb-3">All Hospital & Clinic Appointments</h6>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Patient</th>
+                      <th>Doctor</th>
+                      <th>Date</th>
+                      <th>Time Slot</th>
+                      <th>Status</th>
+                      <th class="text-end">Update Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminAppointmentsTableBody">
+                    <tr><td colspan="6" class="text-center py-4 text-muted">Loading appointments...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- User Role Permissions Tab -->
+            <div class="tab-pane fade" id="tab-users" role="tabpanel">
+              <h6 class="fw-bold text-dark mb-3">User Access & Role Management</h6>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Assigned Role</th>
+                      <th>Phone</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminUsersTableBody">
+                    <tr><td colspan="5" class="text-center py-4 text-muted">Loading users...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Doctor Modal -->
+  <div class="modal fade" id="adminAddDoctorModal" tabindex="-1" aria-labelledby="adminAddDoctorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header border-bottom p-4">
+          <h5 class="modal-title fw-bold text-dark" id="adminAddDoctorModalLabel">
+            <i class="bi bi-person-plus text-primary me-2"></i>Add Doctor to Directory
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="adminAddDoctorForm">
+          <div class="modal-body p-4">
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Doctor Full Name *</label>
+                <input type="text" id="adminDocName" class="form-control form-control-ht" placeholder="Dr. Alexander Wright" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Specialization *</label>
+                <input type="text" id="adminDocSpec" class="form-control form-control-ht" placeholder="e.g. Cardiology" required>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Qualifications</label>
+                <input type="text" id="adminDocQual" class="form-control form-control-ht" placeholder="MD, MBBS, FACC">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small fw-bold text-dark">Years Experience</label>
+                <input type="number" id="adminDocExp" class="form-control form-control-ht" placeholder="10">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label small fw-bold text-dark">Consultation Fee ($)</label>
+                <input type="number" id="adminDocFee" class="form-control form-control-ht" placeholder="100">
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Department</label>
+                <input type="text" id="adminDocDept" class="form-control form-control-ht" placeholder="Cardiovascular Center">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Room / Clinic Number</label>
+                <input type="text" id="adminDocRoom" class="form-control form-control-ht" placeholder="Suite 305">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Professional Biography</label>
+              <textarea id="adminDocBio" class="form-control form-control-ht" rows="3" placeholder="Clinical specialties, patient philosophy, education..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-0 p-4 pt-0">
+            <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" id="btnSubmitDoctor" class="btn btn-primary-ht rounded-3">
+              Save Doctor Profile
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

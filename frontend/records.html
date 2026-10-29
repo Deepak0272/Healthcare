@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Health Records – Health Tech</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-header">
+        <a class="brand-logo" href="dashboard.html">
+          <div class="logo-icon"><i class="bi bi-heart-pulse-fill"></i></div>
+          <span>Health<span class="highlight">Tech</span></span>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="sidebar-heading">Main Navigation</li>
+        <li class="sidebar-item">
+          <a href="dashboard.html" class="sidebar-link">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="records.html" class="sidebar-link active">
+            <i class="bi bi-folder2-open"></i>
+            <span>My Health Records</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="monitoring.html" class="sidebar-link">
+            <i class="bi bi-activity"></i>
+            <span>Health Monitoring</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="appointments.html" class="sidebar-link">
+            <i class="bi bi-calendar2-check"></i>
+            <span>Appointments</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="emergency.html" class="sidebar-link emergency-link">
+            <i class="bi bi-shield-fill-exclamation"></i>
+            <span>Emergency Contacts</span>
+          </a>
+        </li>
+
+        <li class="sidebar-heading mt-3">Account & Management</li>
+        <li class="sidebar-item">
+          <a href="profile.html" class="sidebar-link">
+            <i class="bi bi-person-gear"></i>
+            <span>Profile Settings</span>
+          </a>
+        </li>
+        <li class="sidebar-item" id="sidebar-admin-link" style="display: none;">
+          <a href="admin.html" class="sidebar-link text-warning">
+            <i class="bi bi-shield-lock-fill"></i>
+            <span>Admin Panel</span>
+          </a>
+        </li>
+        <li class="sidebar-item mt-2">
+          <a href="#" class="sidebar-link text-danger btn-logout-action">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Sign Out</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar user-avatar-initials">P</div>
+          <div class="user-meta">
+            <div class="name user-display-name">Patient</div>
+            <div class="role-badge user-display-role">PATIENT</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="sidebar-toggle-btn" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+          </button>
+          <div>
+            <h5 class="mb-0 fw-bold text-dark">Digital Health Records</h5>
+            <span class="small text-muted">Manage doctor prescriptions, lab diagnostics, and treatment plans</span>
+          </div>
+        </div>
+        <button class="btn btn-primary-ht" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+          <i class="bi bi-plus-lg me-1"></i>Upload & Add Record
+        </button>
+      </header>
+
+      <div class="dashboard-body">
+        <!-- Filter and Search Row -->
+        <div class="card card-ht p-3 mb-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-7">
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" id="recordSearchInput" class="form-control form-control-ht border-start-0" placeholder="Search by title, diagnosis, or attending doctor...">
+              </div>
+            </div>
+            <div class="col-md-5">
+              <select id="recordTypeSelect" class="form-select form-control-ht">
+                <option value="">All Record Categories</option>
+                <option value="Prescription">Prescriptions</option>
+                <option value="Lab Report">Lab Diagnostics & Panels</option>
+                <option value="Diagnosis">Clinical Diagnoses</option>
+                <option value="Vaccination">Vaccinations / Immunization</option>
+                <option value="Imaging/X-Ray">Imaging & Radiography</option>
+                <option value="General Note">General Clinical Notes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Records Grid -->
+        <div class="row" id="recordsContainer">
+          <div class="col-12 text-center py-5 text-muted">
+            <div class="spinner-border text-primary spinner-border-sm mb-2"></div>
+            <div>Loading digital health records...</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add Health Record Modal -->
+  <div class="modal fade" id="addRecordModal" tabindex="-1" aria-labelledby="addRecordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-header border-bottom p-4">
+          <h5 class="modal-title fw-bold text-dark" id="addRecordModalLabel">
+            <i class="bi bi-file-earmark-medical text-primary me-2"></i>Add Digital Health Record
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addRecordForm" enctype="multipart/form-data">
+          <div class="modal-body p-4">
+            <div class="row g-3 mb-3">
+              <div class="col-md-8">
+                <label class="form-label small fw-bold text-dark">Record Title *</label>
+                <input type="text" id="recTitle" class="form-control form-control-ht" placeholder="e.g. Hypertension Assessment & Prescription" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold text-dark">Record Type *</label>
+                <select id="recType" class="form-select form-control-ht" required>
+                  <option value="Prescription" selected>Prescription</option>
+                  <option value="Lab Report">Lab Report</option>
+                  <option value="Diagnosis">Diagnosis</option>
+                  <option value="Vaccination">Vaccination</option>
+                  <option value="Imaging/X-Ray">Imaging / X-Ray</option>
+                  <option value="General Note">General Note</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Attending Doctor Name</label>
+                <input type="text" id="recDoctor" class="form-control form-control-ht" placeholder="Dr. Sarah Jenkins">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold text-dark">Consultation / Assessment Date</label>
+                <input type="date" id="recDate" class="form-control form-control-ht">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Clinical Diagnosis</label>
+              <input type="text" id="recDiagnosis" class="form-control form-control-ht" placeholder="e.g. Primary Essential Hypertension">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Treatment & Care Plan</label>
+              <textarea id="recPlan" class="form-control form-control-ht" rows="2" placeholder="e.g. Sodium restriction & daily 30-minute cardiovascular aerobic activity."></textarea>
+            </div>
+
+            <!-- Dynamic Medications Container -->
+            <div class="p-3 bg-light rounded-3 border mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="small fw-bold text-dark">Prescribed Medications</span>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="btnAddMedicationRow">
+                  <i class="bi bi-plus me-1"></i>Add Medication
+                </button>
+              </div>
+              <div id="medicationsRowContainer"></div>
+              <div class="small text-muted">Click "+ Add Medication" to log drugs, dosage, frequency, and instructions.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Attach Diagnostic Report File (PDF, Word, or Image)</label>
+              <input type="file" id="recAttachment" class="form-control form-control-ht" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.webp,.txt">
+              <div class="small text-muted mt-1">Upload verified files up to 10MB in size.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Additional Clinical Notes</label>
+              <textarea id="recNotes" class="form-control form-control-ht" rows="2" placeholder="Physician remarks or instructions"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-0 p-4 pt-0">
+            <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" id="btnSubmitRecord" class="btn btn-primary-ht rounded-3">
+              Save Medical Record
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/records.js"></script>
+</body>
+</html>

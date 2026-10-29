@@ -1,0 +1,19 @@
+{
+  "name": "health-tech",
+  "version": "1.0.0",
+  "description": "Health Tech - Smart Healthcare Management System",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "seed": "cd backend && npm run seed"
+  },
+  "keywords": [
+    "healthcare",
+    "health-tech",
+    "patient-management",
+    "vital-signs",
+    "python-analytics"
+  ],
+  "author": "HealthTech Team",
+  "license": "ISC"
+}
